@@ -17,11 +17,9 @@ Siga os passos abaixo para rodar o projeto tanto em Windows quanto em Linux.
 ### 1. Clonando o Repositório
 
 Clone o repositório para a sua máquina local:
-
 ```bash
 git clone https://github.com/GustavoHenriqueFerreira/indexador-buscador-de-palavras
 cd indexador-buscador-de-palavras
-
 ```
 
 ### 2. Compilando o Código
@@ -29,32 +27,31 @@ cd indexador-buscador-de-palavras
 #### 2.1 No Windows:
 Abra o Prompt de Comando ou PowerShell.
 Navegue até o diretório do projeto, caso não tenha feito isso anteriormente.
+
 Compile o código usando o compilador gcc (caso tenha o MinGW ou outro compilador instalado):
 ```bash
-Copiar código
 gcc -o indexador indexador.c
 ```
+
 #### 2.2 No Linux:
 Abra o Terminal.
 Navegue até o diretório do projeto.
+
 Compile o código usando o gcc:
 ```bash
-Copiar código
 gcc -o indexador indexador.c
 ```
+
 Caso não tenha o GCC instalado, você pode instalá-lo executando:
 
 Ubuntu/Debian:
-
 ```bash
-Copiar código
 sudo apt update
 sudo apt install build-essential
-Fedora:
 ```
 
+Fedora:
 ```bash
-Copiar código
 sudo dnf groupinstall "Development Tools"
 ```
 
@@ -68,13 +65,11 @@ Copiar código
 ```
 
 Onde:
-
 <arquivo> é o nome do arquivo de texto a ser indexado.
 <tipo_indice> pode ser arvore para o tipo de índice binário.
 Exemplo:
 
 ```bash
-Copiar código
 ./indexador texto.txt arvore
 ```
 
@@ -87,13 +82,11 @@ Busca por palavra: Digite o comando busca <palavra>, onde <palavra> é a palavra
 Exemplo de busca:
 
 ```bash
-Copiar código
 busca palavra
 ```
 
 Finalizar o programa: Para encerrar o programa, digite o comando:
 ```bash
-Copiar código
 fim
 ```
 
