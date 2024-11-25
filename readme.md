@@ -60,7 +60,6 @@ No Windows e Linux:
 Depois de compilar o programa, você pode rodá-lo com o seguinte comando:
 
 ```bash
-Copiar código
 ./indexador <arquivo> <tipo_indice>
 ```
 
