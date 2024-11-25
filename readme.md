@@ -12,11 +12,11 @@ Este projeto implementa um índice de palavras utilizando uma árvore binária. 
 
 ### Passos para Windows e Linux
 
-Siga os passos abaixo para rodar o projeto tanto em Windows quanto em Linux.
+- Siga os passos abaixo para rodar o projeto tanto em Windows quanto em Linux.
 
 ### 1. Clonando o Repositório
 
-Clone o repositório para a sua máquina local:
+- Clone o repositório para a sua máquina local:
 ```bash
 git clone https://github.com/GustavoHenriqueFerreira/indexador-buscador-de-palavras
 cd indexador-buscador-de-palavras
@@ -25,17 +25,17 @@ cd indexador-buscador-de-palavras
 ### 2. Compilando o Código
 
 #### 2.1 No Windows:
-Abra o Prompt de Comando ou PowerShell.
-Navegue até o diretório do projeto, caso não tenha feito isso anteriormente.
+- Abra o Prompt de Comando ou PowerShell.
+- Navegue até o diretório do projeto, caso não tenha feito isso anteriormente.
 
-Compile o código usando o compilador gcc (caso tenha o MinGW ou outro compilador instalado):
+- Compile o código usando o compilador gcc (caso tenha o MinGW ou outro compilador instalado):
 ```bash
 gcc -o indexador indexador.c
 ```
 
 #### 2.2 No Linux:
-Abra o Terminal.
-Navegue até o diretório do projeto.
+- Abra o Terminal.
+- Navegue até o diretório do projeto.
 
 Compile o código usando o gcc:
 ```bash
@@ -77,11 +77,11 @@ Isso carregará o arquivo texto.txt, indexará as palavras e criará um índice 
 ### 4. Interagindo com o Programa
 Após a execução do programa, você pode realizar as seguintes interações:
 
-Busca por palavra: Digite o comando busca <palavra>, onde <palavra> é a palavra que deseja procurar no arquivo.
+- Busca por palavra: Digite o comando busca "palavra", onde "palavra" é a palavra que deseja procurar no arquivo.
 Exemplo de busca:
 
 ```bash
-busca palavra
+busca lorem
 ```
 
 Finalizar o programa: Para encerrar o programa, digite o comando:
