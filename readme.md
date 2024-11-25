@@ -64,8 +64,8 @@ Depois de compilar o programa, você pode rodá-lo com o seguinte comando:
 ```
 
 Onde:
-<arquivo> é o nome do arquivo de texto a ser indexado.
-<tipo_indice> pode ser arvore para o tipo de índice binário.
+"arquivo" é o nome do arquivo de texto a ser indexado.
+"tipo_indice" pode ser arvore para o tipo de índice binário.
 Exemplo:
 
 ```bash
@@ -78,8 +78,8 @@ Isso carregará o arquivo texto.txt, indexará as palavras e criará um índice 
 Após a execução do programa, você pode realizar as seguintes interações:
 
 - Busca por palavra: Digite o comando busca "palavra", onde "palavra" é a palavra que deseja procurar no arquivo.
-
 Exemplo de busca:
+
 ```bash
 busca lorem
 ```
