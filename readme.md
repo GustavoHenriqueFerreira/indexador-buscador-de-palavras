@@ -78,8 +78,8 @@ Isso carregará o arquivo texto.txt, indexará as palavras e criará um índice 
 Após a execução do programa, você pode realizar as seguintes interações:
 
 - Busca por palavra: Digite o comando busca "palavra", onde "palavra" é a palavra que deseja procurar no arquivo.
-Exemplo de busca:
 
+Exemplo de busca:
 ```bash
 busca lorem
 ```
