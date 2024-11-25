@@ -64,7 +64,7 @@ Depois de compilar o programa, você pode rodá-lo com o seguinte comando:
 ```
 
 ```bash 
-<arquivo> //é o nome do arquivo de texto a ser indexado.
+<arquivo> é o nome do arquivo de texto a ser indexado.
 ``` 
 
 ```bash 
@@ -96,9 +96,9 @@ fim
 ### 5. Estrutura do Código
 O programa é estruturado da seguinte maneira:
 
-indexador.c: O arquivo principal, onde a lógica de carregamento do arquivo, construção do índice e interação com o usuário é implementada.
-Funções: O código usa funções para manipulação de palavras (remoção de pontuação, conversão para minúsculas), construção de árvores binárias e leitura do arquivo.
-Arquivo de texto: O arquivo de texto é lido linha por linha, e cada palavra é indexada na árvore binária.
+- indexador.c: O arquivo principal, onde a lógica de carregamento do arquivo, construção do índice e interação com o usuário é implementada.
+- Funções: O código usa funções para manipulação de palavras (remoção de pontuação, conversão para minúsculas), construção de árvores binárias e leitura do arquivo.
+- Arquivo de texto: O arquivo de texto é lido linha por linha, e cada palavra é indexada na árvore binária.
 
 ### 6. Exemplo de Saída
 Após rodar o programa, o índice é construído e você pode realizar buscas para encontrar as palavras no arquivo. A saída pode ser algo como:
