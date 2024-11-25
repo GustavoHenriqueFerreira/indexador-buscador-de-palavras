@@ -63,9 +63,13 @@ Depois de compilar o programa, você pode rodá-lo com o seguinte comando:
 ./indexador <arquivo> <tipo_indice>
 ```
 
-Onde:
-"arquivo" é o nome do arquivo de texto a ser indexado.
-"tipo_indice" pode ser arvore para o tipo de índice binário.
+```bash 
+<arquivo> //é o nome do arquivo de texto a ser indexado.
+``` 
+
+```bash 
+<tipo_indice> //pode ser arvore para o tipo de índice binário.
+``` 
 Exemplo:
 
 ```bash
