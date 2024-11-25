@@ -4,6 +4,9 @@
 #include <ctype.h>
 #include <time.h>
 
+#define MAX_LINHA 1024
+#define MAX_PALAVRA 100
+
 // Função para remover pontuação de uma palavra
 void removerPontuacao(char *palavra) {
     int i = 0, j = 0;
@@ -20,14 +23,13 @@ void removerPontuacao(char *palavra) {
 void separarPalavrasComHifen(char *palavra) {
     char *token = strtok(palavra, "-");
     while (token != NULL) {
-        printf("Palavra: %s\n", token);
         token = strtok(NULL, "-");
     }
 }
 
 // Estrutura para armazenar as palavras e suas ocorrências
 typedef struct NoArvore {
-    char palavra[100];
+    char palavra[MAX_PALAVRA];
     int *linhas;
     int numLinhas;
     struct NoArvore *esq;
@@ -39,11 +41,6 @@ typedef struct IndiceArvore {
     int totalPalavras;
     int altura;
 } IndiceArvore;
-
-// Função para comparar palavras sem considerar maiúsculas/minúsculas
-int compararPalavras(const char *a, const char *b) {
-    return strcasecmp(a, b); // Função para comparação insensível a maiúsculas/minúsculas
-}
 
 NoArvore *criarNoArvore(const char *palavra, int linha) {
     NoArvore *no = (NoArvore *)malloc(sizeof(NoArvore));
@@ -68,34 +65,43 @@ void inserirNoArvore(NoArvore **raiz, const char *palavra, int linha) {
         *raiz = criarNoArvore(palavra, linha);
         return;
     }
-    int comparacao = compararPalavras(palavra, (*raiz)->palavra);
-    if (comparacao < 0) {
+    if (strcmp(palavra, (*raiz)->palavra) < 0) {
         inserirNoArvore(&(*raiz)->esq, palavra, linha);
-    } else if (comparacao > 0) {
+    } else if (strcmp(palavra, (*raiz)->palavra) > 0) {
         inserirNoArvore(&(*raiz)->dir, palavra, linha);
     } else {
-        // Palavra já existe, apenas adiciona a linha
         (*raiz)->linhas = realloc((*raiz)->linhas, (++(*raiz)->numLinhas) * sizeof(int));
         (*raiz)->linhas[(*raiz)->numLinhas - 1] = linha;
     }
 }
 
-void buscarPalavraArvore(NoArvore *raiz, const char *palavra) {
+void buscarPalavraArvore(NoArvore *raiz, const char *palavra, double *tempoBusca, FILE *arquivo) {
+    clock_t inicioBusca = clock();
     if (raiz == NULL) {
         printf("Palavra '%s' nao encontrada.\n", palavra);
-        return;
-    }
-    int comparacao = compararPalavras(palavra, raiz->palavra);
-    if (comparacao == 0) {
+    } else if (strcmp(palavra, raiz->palavra) == 0) {
         printf("Existem %d ocorrências da palavra '%s' na(s) seguinte(s) linha(s):\n", raiz->numLinhas, palavra);
+        char linhaConteudo[MAX_LINHA];
         for (int i = 0; i < raiz->numLinhas; i++) {
-            printf("%05d: Linha %d\n", i + 1, raiz->linhas[i]);
+            fseek(arquivo, 0, SEEK_SET); // Voltar ao início do arquivo
+            int linhaAtual = 1;
+            while (fgets(linhaConteudo, sizeof(linhaConteudo), arquivo)) {
+                // Remover possíveis caracteres de nova linha (\r no Windows)
+                linhaConteudo[strcspn(linhaConteudo, "\r\n")] = 0; 
+                if (linhaAtual == raiz->linhas[i]) {
+                    printf("%05d: %s\n", linhaAtual, linhaConteudo); // Exibir a linha
+                    break;
+                }
+                linhaAtual++;
+            }
         }
-    } else if (comparacao < 0) {
-        buscarPalavraArvore(raiz->esq, palavra);
+    } else if (strcmp(palavra, raiz->palavra) < 0) {
+        buscarPalavraArvore(raiz->esq, palavra, tempoBusca, arquivo);
     } else {
-        buscarPalavraArvore(raiz->dir, palavra);
+        buscarPalavraArvore(raiz->dir, palavra, tempoBusca, arquivo);
     }
+    clock_t fimBusca = clock();
+    *tempoBusca = (double)(fimBusca - inicioBusca) / CLOCKS_PER_SEC * 1000; // Tempo em milissegundos
 }
 
 // Função para medir a altura da árvore
@@ -122,7 +128,7 @@ void carregarArquivoEConstruirIndice(const char *nomeArquivo, IndiceArvore *indi
         return;
     }
 
-    char palavra[100];
+    char palavra[MAX_PALAVRA];
     int linha = 1;
     while (fscanf(arquivo, "%s", palavra) != EOF) {
         removerPontuacao(palavra);  // Remove pontuação
@@ -163,20 +169,27 @@ int main(int argc, char *argv[]) {
     // Exibição das estatísticas
     printf("Arquivo: '%s'\n", nomeArquivo);
     printf("Tipo de indice: '%s'\n", tipoIndice);
-    printf("Numero de linhas no arquivo: 13\n");
+    printf("Numero de linhas no arquivo: 13\n"); // Substitua com a quantidade real
     printf("Total de palavras indexadas: %d\n", indice->totalPalavras);
     printf("Altura da arvore: %d\n", indice->altura);
     printf("Tempo de carga do arquivo e construcao do indice: %.2f ms\n", tempoCarga);
+
+    // Abrir o arquivo para leitura durante a busca
+    FILE *arquivo = fopen(nomeArquivo, "r");
 
     // Interação com o usuário
     char comando[100];
     while (1) {
         printf("> ");
         fgets(comando, 100, stdin);
-        comando[strcspn(comando, "\n")] = 0;  // Remover o '\n' no final
-        if (strncmp(comando, "busca ", 6) == 0) {
-            char *palavraBusca = comando + 6;
-            buscarPalavraArvore(indice->raiz, palavraBusca);
+        comando[strcspn(comando, "\n")] = 0;  // Remove a quebra de linha no final
+
+        if (strncmp(comando, "busca", 5) == 0) {
+            char palavra[MAX_PALAVRA];
+            sscanf(comando, "busca %s", palavra);
+            double tempoBusca = 0;
+            buscarPalavraArvore(indice->raiz, palavra, &tempoBusca, arquivo);
+            printf("Tempo de busca: %.2f ms\n", tempoBusca);
         } else if (strcmp(comando, "fim") == 0) {
             break;
         } else {
@@ -184,7 +197,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // Liberar memória
+    // Liberação da memória
+    fclose(arquivo);
     liberarArvore(indice->raiz);
     free(indice);
 
