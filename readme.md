@@ -102,20 +102,27 @@ Após rodar o programa, o índice é construído e você pode realizar buscas pa
 
 ```yaml
 Arquivo: 'texto.txt'
-Tipo de índice: 'arvore'
-Número de linhas no arquivo: 13
-Total de palavras indexadas: 100
-Altura da árvore: 5
-Tempo de carga do arquivo e construção do índice: 15.30 ms
-
-> busca palavra
-Existem 3 ocorrências da palavra 'palavra' na(s) seguinte(s) linha(s):
-0002: Esta é a linha que contém a palavra.
-0045: Outra linha com a palavra mencionada.
-0078: Palavra novamente encontrada aqui.
-
-Tempo de busca: 0.15 ms
-
+Tipo de indice: 'arvore'
+Numero de linhas no arquivo: 13
+Total de palavras indexadas: XXXXX
+Altura da arvore: XXXXX
+Tempo de carga do arquivo e construcao do indice: XXXXX ms
+> busca algorithm
+Existem 4 ocorrências da palavra 'algorithm' na(s) seguinte(s) linha(s):
+00001: Informally, an algorithm is any well-defined computational procedure that takes
+00003: as output. An algorithm is thus a sequence of computational steps that transform
+00006: We can also view an algorithm as a tool for solving a well-specified computational
+00008: input/output relationship. The algorithm describes a specific computational
+Tempo de busca: XXXXX ms
+> busca set
+Existem 2 ocorrências da palavra 'set' na(s) seguinte(s) linha(s):
+00002: some value, or set of values, as input and produces some value, or set of values,
+Tempo de busca: XXXXX ms
+> busca quicksort
+Palavra 'quicksort' nao encontrada.
+Tempo de busca: XXXXX ms
+> buska quicksort
+Opcao invalida!
 > fim
 ```
 
