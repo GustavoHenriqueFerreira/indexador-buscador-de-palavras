@@ -18,6 +18,118 @@ void removerPontuacao(char *palavra) {
     palavra[j] = '\0';
 }
 
+// Estrutura para o nó da lista
+typedef struct NoLista {
+    char palavra[MAX_LINHA];  
+    int *linhas;              
+    int numLinhas;            
+    struct NoLista *proximo;  
+} NoLista;
+
+// Estrutura para o índice de lista
+typedef struct IndiceLista {
+    NoLista *primeiro;                 
+    int totalPalavras;                 
+    int numLinhas;                     
+    char (*conteudoLinhas)[MAX_LINHA];
+} IndiceLista;
+
+NoLista *criarNoLista(const char *palavra, int linha) {
+    NoLista *no = (NoLista *)malloc(sizeof(NoLista));
+    if (!no) {
+        fprintf(stderr, "Erro ao alocar memória para nó de lista.\n");
+        exit(EXIT_FAILURE);
+    }
+    strcpy(no->palavra, palavra);
+    no->linhas = (int *)malloc(sizeof(int));
+    no->linhas[0] = linha;
+    no->numLinhas = 1;
+    no->proximo = NULL;
+    return no;
+}
+
+void inserirNaLista(IndiceLista *indice, const char *palavra, int linha) {
+    NoLista *atual = indice->primeiro;
+
+    while (atual) {
+        if (strcmp(atual->palavra, palavra) == 0) {
+            atual->linhas = realloc(atual->linhas, (atual->numLinhas + 1) * sizeof(int));
+            atual->linhas[atual->numLinhas++] = linha;
+            return;
+        }
+        atual = atual->proximo;
+    }
+
+    NoLista *novo = criarNoLista(palavra, linha);
+    novo->proximo = indice->primeiro;
+    indice->primeiro = novo;
+    indice->totalPalavras++;
+}
+
+NoLista *buscarNaLista(IndiceLista *indice, const char *palavra) {
+    NoLista *atual = indice->primeiro;
+    while (atual) {
+        if (strcmp(atual->palavra, palavra) == 0) {
+            return atual;
+        }
+        atual = atual->proximo;
+    }
+    return NULL;
+}
+
+void imprimirLinhasLista(IndiceLista *indice, const char *palavra) {
+    NoLista *no = buscarNaLista(indice, palavra);
+    if (!no) {
+        printf("Palavra '%s' nao encontrada.\n", palavra);
+        return;
+    }
+
+    printf("Existem %d ocorrências da palavra '%s' na(s) seguinte(s) linha(s):\n", no->numLinhas, palavra);
+    for (int i = 0; i < no->numLinhas; i++) {
+        int linha = no->linhas[i];
+        printf("%05d: %s", linha, indice->conteudoLinhas[linha - 1]);
+    }
+}
+
+void carregarArquivoEConstruirIndiceLista(const char *nomeArquivo, IndiceLista *indice) {
+    FILE *arquivo = fopen(nomeArquivo, "r");
+    if (!arquivo) {
+        fprintf(stderr, "Erro ao abrir o arquivo.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    indice->conteudoLinhas = malloc(MAX_LINHA * sizeof(char[MAX_LINHA]));
+    char linha[MAX_LINHA];
+    int numeroLinha = 0;
+
+    while (fgets(linha, sizeof(linha), arquivo)) {
+        strcpy(indice->conteudoLinhas[numeroLinha], linha);
+        numeroLinha++;
+        char *token = strtok(linha, " ");
+        while (token != NULL) {
+            inserirNaLista(indice, token, numeroLinha);
+            token = strtok(NULL, " ");
+        }
+    }
+
+    indice->numLinhas = numeroLinha;
+    fclose(arquivo);
+}
+
+void liberarLista(IndiceLista *indice) {
+    NoLista *atual = indice->primeiro;
+    while (atual) {
+        NoLista *temp = atual;
+        free(atual->linhas);
+        atual = atual->proximo;
+        free(temp);
+    }
+    free(indice->conteudoLinhas);
+    free(indice);
+}
+
+
+
 // Estrutura para o nó da árvore
 typedef struct NoArvore {
     char palavra[MAX_LINHA];
@@ -55,6 +167,7 @@ NoArvore *criarNoArvore(const char *palavra, int linha) {
     no->esq = no->dir = NULL;
     return no;
 }
+
 
 int altura(NoArvore *no) {
     return no ? no->altura : 0;
@@ -225,6 +338,45 @@ int main(int argc, char *argv[]) {
     printf("Tipo de indice: '%s'\n", tipoIndice);
     printf("Numero de linhas no arquivo: %d\n", indice->numLinhas);
     printf("Total de palavras indexadas: %d\n", indice->totalPalavras);
+    
+    if (strcmp(tipoIndice, "lista") == 0) {
+        // Modo lista
+        IndiceLista *indice = (IndiceLista *)malloc(sizeof(IndiceLista));
+        indice->primeiro = NULL;
+        indice->totalPalavras = 0;
+    
+        clock_t inicio = clock();
+        carregarArquivoEConstruirIndiceLista(nomeArquivo, indice);
+        clock_t fim = clock();
+
+        printf("Tipo de indice: 'lista'\n");
+        printf("Arquivo: '%s'\n", nomeArquivo);
+        printf("Numero de linhas no arquivo: %d\n", indice->numLinhas);
+        printf("Total de palavras indexadas: %d\n", indice->totalPalavras);
+        printf("Tempo de carga do arquivo e construcao do indice: %.2f ms\n", (double)(fim - inicio) / CLOCKS_PER_SEC * 1000);
+
+        char comando[MAX_LINHA];
+        while (1) {
+            printf("> ");
+            fgets(comando, sizeof(comando), stdin);
+            comando[strcspn(comando, "\n")] = 0;
+
+            if (strncmp(comando, "busca ", 6) == 0) {
+                char palavra[MAX_LINHA];
+                strcpy(palavra, comando + 6);
+                removerPontuacao(palavra);
+                imprimirLinhasLista(indice, palavra);
+            } else if (strcmp(comando, "fim") == 0) {
+                break;
+            } else {
+                printf("Opcao invalida!\n");
+            }
+        }
+
+        liberarLista(indice);
+}
+
+
     if (strcmp(tipoIndice, "arvore") == 0) {
         printf("Altura da arvore: %d\n", altura(indice->raiz));
     }
