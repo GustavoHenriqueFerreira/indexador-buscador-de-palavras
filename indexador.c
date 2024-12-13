@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include <time.h>
 
-#define MAX_LINHA 1024
+#define MAX_LINHA 10000
 
 // Função para remover pontuação e converter para minúsculas
 void removerPontuacao(char *palavra) {
@@ -101,7 +101,7 @@ void imprimirLinhasLista(IndiceLista *indice, const char *palavra) {
     NoLista *no = buscarNaLista(indice, palavra);
     if (!no) {
         printf("Palavra '%s' nao encontrada.", palavra);
-        printf("Tempo de busca: %.2f ms\n", (double)(clock() - inicio) / CLOCKS_PER_SEC * 1000);
+        printf("\nTempo de busca: %.2f ms\n", (double)(clock() - inicio) / CLOCKS_PER_SEC * 1000);
         return;
     }
 
@@ -110,7 +110,7 @@ void imprimirLinhasLista(IndiceLista *indice, const char *palavra) {
         int linha = no->linhas[i];
         printf("%05d: %s", linha, indice->conteudoLinhas[linha - 1]);
     }   
-     printf("Tempo de busca: %.2f ms\n", (double)(clock() - inicio) / CLOCKS_PER_SEC * 1000);
+     printf("\nTempo de busca: %.2f ms\n", (double)(clock() - inicio) / CLOCKS_PER_SEC * 1000);
 
 }
 
