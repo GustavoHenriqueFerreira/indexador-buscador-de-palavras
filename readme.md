@@ -68,7 +68,7 @@ Depois de compilar o programa, você pode rodá-lo com o seguinte comando:
 ``` 
 
 ```bash 
-<tipo_indice> //pode ser arvore para o tipo de índice binário.
+<tipo_indice> //pode ser arvore para o tipo de índice binário ou lista para lista ligada.
 ``` 
 Exemplo:
 
@@ -77,6 +77,12 @@ Exemplo:
 ```
 
 Isso carregará o arquivo texto.txt, indexará as palavras e criará um índice utilizando uma árvore binária.
+
+```bash
+./indexador texto.txt lista
+```
+
+Isso carregará o arquivo texto.txt, indexará as palavras e criará um índice utilizando uma lista ligada.
 
 ### 4. Interagindo com o Programa
 Após a execução do programa, você pode realizar as seguintes interações:
